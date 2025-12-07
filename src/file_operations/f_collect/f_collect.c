@@ -1,5 +1,6 @@
 #include "f_collect.h"
 #include "f_data.h"
+#include "f_matcher.h"
 #include "logger.h"
 #include <dirent.h>
 #include <limits.h>
@@ -9,24 +10,8 @@ static boolean is_dot_file(const char *filename) {
   return (!strcmp(filename, ".") || !strcmp(filename, ".."));
 }
 
-static char *get_file_extension(const char *filename) {
-  char *dot = strrchr(filename, '.');
-  if (!dot || dot == filename) {
-    // no extension found
-    return "";
-  }
-  return dot + 1;
-}
-static boolean is_file_of_interest(const char *filename,
-                                   const char *regex_pattern) {
-  // Placeholder for regex matching logic
-  // For simplicity, let's assume all files match the pattern
-  return TRUE;
-}
-
-static std_return_type collect_in_dir_regex(const char *directory_path,
-                                            FileList *file_list,
-                                            const char *regex_pattern) {
+static std_return_type collect_in_dir(const char *directory_path,
+                                      FileList *file_list) {
   DIR *dir = opendir(directory_path);
   if (dir == NULL) {
     LOG_ERROR("Failed to open directory: %s", directory_path);
@@ -51,10 +36,10 @@ static std_return_type collect_in_dir_regex(const char *directory_path,
 
     if (S_ISDIR(st.st_mode)) {
       // Recursively walk into subdirectory
-      collect_in_dir_regex(full_entry_path, file_list, regex_pattern);
+      collect_in_dir_regex(full_entry_path, file_list);
     } else if (S_ISREG(st.st_mode)) {
       // Process regular file
-      if (is_file_of_interest(entry->d_name, regex_pattern)) {
+      if (is_file_match(entry->d_name)) {
         filelist_add(file_list, full_entry_path);
       }
     }
@@ -64,17 +49,16 @@ static std_return_type collect_in_dir_regex(const char *directory_path,
   return STD_RETURN_OK;
 };
 
-std_return_type files_by_regex(const char *directory_path,
-                               const char *regex_pattern) {
+std_return_type find_files(const char *directory_path) {
   FileList file_list = {0};
   filelist_init(&file_list);
-  std_return_type result =
-      collect_in_dir_regex(directory_path, &file_list, regex_pattern);
+  std_return_type result = collect_in_dir(directory_path, &file_list);
   if (result == STD_RETURN_OK) {
     for (size_t i = 0; i < file_list.count; i++) {
       LOG_INFO("Collected file: %s", file_list.files[i]);
     }
   }
+  // TODO: to this globally for all lists
   filelist_free(&file_list);
   return result;
 }

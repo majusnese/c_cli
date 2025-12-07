@@ -1,7 +1,6 @@
 #include "f_data.h"
 #include <stdlib.h>
 #include <string.h>
-// this is essentially the logic of std::vector from C++
 
 void filelist_init(FileList *list) {
   list->count = 0;
