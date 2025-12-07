@@ -7,9 +7,16 @@ set(SOURCES
     ${SOURCE_DIR}/cli_parser/cli_parser.c
     ${SOURCE_DIR}/shared/logger/logger.c
     ${SOURCE_DIR}/configuration/configuration.c
+    ${SOURCE_DIR}/file_operations/f_collect/f_collect.c
+    ${SOURCE_DIR}/file_operations/f_data/f_data.c
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher.c
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_regex/f_m_regex.c
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_extension/f_m_extension.c
+    ${SOURCE_DIR}/configuration/module_handler.c
 )
 
 add_executable(c_cli ${SOURCES})
+target_link_libraries(c_cli PRIVATE regex)
 
 target_include_directories(c_cli PRIVATE
     ${SOURCE_DIR}
@@ -17,4 +24,10 @@ target_include_directories(c_cli PRIVATE
     ${SOURCE_DIR}/configuration
     ${SOURCE_DIR}/shared
     ${SOURCE_DIR}/shared/logger
+    ${SOURCE_DIR}/file_operations/f_collect
+    ${SOURCE_DIR}/file_operations/f_data
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_regex
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_extension
+
 )
