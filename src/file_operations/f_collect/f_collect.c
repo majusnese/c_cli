@@ -36,7 +36,7 @@ static std_return_type collect_in_dir(const char *directory_path,
 
     if (S_ISDIR(st.st_mode)) {
       // Recursively walk into subdirectory
-      collect_in_dir_regex(full_entry_path, file_list);
+      collect_in_dir(full_entry_path, file_list);
     } else if (S_ISREG(st.st_mode)) {
       // Process regular file
       if (is_file_match(entry->d_name)) {
@@ -50,9 +50,24 @@ static std_return_type collect_in_dir(const char *directory_path,
 };
 
 std_return_type find_files(const char *directory_path) {
+  if (directory_path == NULL) {
+    LOG_ERROR("Directory path is NULL");
+    return STD_RETURN_ERROR;
+  }
+  if (total_number_matchers == 0) {
+    LOG_WARNING("No file matchers registered; no files will be collected");
+    return STD_RETURN_OK;
+  }
+
   FileList file_list = {0};
   filelist_init(&file_list);
   std_return_type result = collect_in_dir(directory_path, &file_list);
+  if (file_list.count == 0) {
+    LOG_WARNING("No matching files found in directory: %s", directory_path);
+  } else {
+    LOG_INFO("Found %zu matching files in directory: %s", file_list.count,
+             directory_path);
+  }
   if (result == STD_RETURN_OK) {
     for (size_t i = 0; i < file_list.count; i++) {
       LOG_INFO("Collected file: %s", file_list.files[i]);

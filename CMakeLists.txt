@@ -15,6 +15,7 @@ set(SOURCES
 )
 
 add_executable(c_cli ${SOURCES})
+target_link_libraries(c_cli PRIVATE regex)
 
 target_include_directories(c_cli PRIVATE
     ${SOURCE_DIR}

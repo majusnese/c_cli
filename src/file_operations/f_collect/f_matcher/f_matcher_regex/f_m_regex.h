@@ -10,7 +10,7 @@ typedef struct regex_contexts {
   size_t capacity;
 } regex_contexts;
 
-// std_return_type register_regex_matcher_internal(const char *regex_pattern);
+std_return_type register_regex_matcher_internal(const char *regex_pattern);
 
 boolean check_regex_match(const char *filename);
 

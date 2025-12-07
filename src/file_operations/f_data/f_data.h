@@ -3,6 +3,8 @@
 
 #include <stddef.h>
 
+// must first register matchers for files via f_matcher
+
 typedef struct {
   char **files;
   size_t count;

@@ -2,6 +2,8 @@
 #include "logger.h"
 #include <stdlib.h>
 
+static regex_contexts global_regex_contexts = {NULL, 0, 0};
+
 static std_return_type resize_regex_contexts_if_needed(void) {
   if (global_regex_contexts.count >= global_regex_contexts.capacity) {
     size_t new_capacity = (global_regex_contexts.capacity == 0)
@@ -20,8 +22,6 @@ static std_return_type resize_regex_contexts_if_needed(void) {
   }
   return STD_RETURN_OK;
 }
-
-regex_contexts global_regex_contexts = {NULL, 0, 0};
 
 std_return_type register_regex_matcher_internal(const char *regex_pattern) {
   if (resize_regex_contexts_if_needed() != STD_RETURN_OK) {
