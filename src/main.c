@@ -9,6 +9,7 @@ int main(int argc, char *argv[]) {
   LOG_INFO("Received %d arguments!", argc);
   parse_to_cfg_struct(argc, argv);
   register_regex_matcher(".*\\.mytestextension$");
+  register_extension_matcher(".notmytestextension");
   find_files("./test/file_operations/test_files");
 
   cleanup_all_resources();

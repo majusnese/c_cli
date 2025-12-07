@@ -11,6 +11,7 @@ set(SOURCES
     ${SOURCE_DIR}/file_operations/f_data/f_data.c
     ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher.c
     ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_regex/f_m_regex.c
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_extension/f_m_extension.c
     ${SOURCE_DIR}/configuration/module_handler.c
 )
 
@@ -27,4 +28,6 @@ target_include_directories(c_cli PRIVATE
     ${SOURCE_DIR}/file_operations/f_data
     ${SOURCE_DIR}/file_operations/f_collect/f_matcher
     ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_regex
+    ${SOURCE_DIR}/file_operations/f_collect/f_matcher/f_matcher_extension
+
 )
