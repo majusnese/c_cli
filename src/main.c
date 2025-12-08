@@ -11,24 +11,25 @@
 int main(int argc, char *argv[]) {
   LOG_INFO("Received %d arguments!", argc);
   parse_to_cfg_struct(argc, argv);
-  register_extension_matcher(".vttmake");
+  register_extension_matcher(".xml");
 
-  FileList vttmake_list = {0};
+  FileList xml_list = {0};
   std_return_type result =
-      find_files("./test/file_operations/test_files", &vttmake_list);
+      find_files("./test/file_operations/test_files", &xml_list);
 
   if (result == STD_RETURN_OK) {
-    for (size_t i = 0; i < vttmake_list.count; i++) {
-      LOG_INFO("Found .vttmake file: %s", vttmake_list.files[i]);
-      // Access XML data from the .vttmake file
-      xmlDoc *vttmake_xml = NULL;
+    for (size_t i = 0; i < xml_list.count; i++) {
+      LOG_INFO("Found .xml file: %s", xml_list.files[i]);
+      xmlDoc *xml_doc = NULL;
       xmlNode *root_element = NULL;
-      load_xml_file(vttmake_list.files[i], &vttmake_xml, &root_element);
-      xmlFreeDoc(vttmake_xml);
+      load_xml_file(xml_list.files[i], &xml_doc, &root_element);
+      LOG_INFO("Age element of test file: %s",
+               get_xml_tag(root_element, "age")->children->content);
+      xmlFreeDoc(xml_doc);
     }
   }
 
-  filelist_free(&vttmake_list);
+  filelist_free(&xml_list);
   cleanup_all_resources();
   return 0;
 }

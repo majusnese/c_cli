@@ -1,6 +1,20 @@
 #include "f_xml_accessor.h"
 #include "logger.h"
 
+xmlNode *get_xml_tag(xmlNode *root, const char *tag_name) {
+  for (xmlNode *cur = root; cur; cur = cur->next) {
+    if (cur->type == XML_ELEMENT_NODE &&
+        xmlStrcmp(cur->name, BAD_CAST tag_name) == 0) {
+      return cur;
+    }
+
+    xmlNode *found = get_xml_tag(cur->children, tag_name);
+    if (found)
+      return found;
+  }
+  return NULL;
+}
+
 std_return_type load_xml_file(const char *file_path, xmlDocPtr *out_doc,
                               xmlNodePtr *out_root) {
   if (file_path == NULL || out_doc == NULL || out_root == NULL) {
